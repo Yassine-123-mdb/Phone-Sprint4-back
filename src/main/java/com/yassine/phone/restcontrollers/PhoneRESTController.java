@@ -20,23 +20,23 @@ public class PhoneRESTController {
 	@Autowired
 	PhoneService phoneService;
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(path="all",method = RequestMethod.GET)
 	public List<PhoneDTO> getAllSmartPhones() {
 		return phoneService.getAllSmartPhones();
 	}
-	@RequestMapping(value="/{id}",method =RequestMethod.GET)
+	@RequestMapping(value="/getbyid/{id}",method =RequestMethod.GET)
 		public PhoneDTO getPhoneById(@PathVariable("id") Long id) {
 		return phoneService.getSmartPhone(id);
-		}
-	@RequestMapping(method=RequestMethod.POST)
+	}
+	@RequestMapping(path="/addphon",method=RequestMethod.POST)
 	public PhoneDTO createPhone(@RequestBody PhoneDTO phoneDTO) {
 		return phoneService.saveSmartPhone(phoneDTO);
 	}
-	@RequestMapping(method=RequestMethod.PUT)
+	@RequestMapping(path="/updatephon",method=RequestMethod.PUT)
 	public PhoneDTO updatePhone(@RequestBody PhoneDTO phoneDTO) {
 		return phoneService.updateSmartPhone(phoneDTO);
 	}
-	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
+	@RequestMapping(value="/delphon/{id}",method=RequestMethod.DELETE)
 	public void deletePhone(@PathVariable("id") Long id) {
 		phoneService.deleteSmartPhoneById(id);
 	}
