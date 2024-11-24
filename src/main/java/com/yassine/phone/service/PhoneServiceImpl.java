@@ -1,46 +1,39 @@
 package com.yassine.phone.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.yassine.phone.dto.PhoneDTO;
 import com.yassine.phone.entities.Phone;
 import com.yassine.phone.entities.Type;
 import com.yassine.phone.repos.PhoneRepository;
-
+import com.yassine.phone.repos.ImageRepository;
 
 @Service
 public class PhoneServiceImpl implements PhoneService {
 
     @Autowired
     private PhoneRepository smartPhoneRepository;
-   
+    
     @Autowired
-    ModelMapper modelMapper;
-
-
-    @Override
-    public PhoneDTO convertEntityToDto(Phone phone) {
-    modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-    PhoneDTO produitDTO = modelMapper.map(phone, PhoneDTO.class);
-     return produitDTO;
-     }
+    private ImageRepository imageRepository;
 
     @Override
-    public PhoneDTO saveSmartPhone(PhoneDTO smartPhone) {
-        return convertEntityToDto(smartPhoneRepository.save(convertDtoToEntity(smartPhone)));
+    public Phone saveSmartPhone(Phone smartPhone) {
+        return smartPhoneRepository.save(smartPhone);
     }
 
     @Override
-    public PhoneDTO updateSmartPhone(PhoneDTO smartPhone) {
-        return convertEntityToDto(smartPhoneRepository.save(convertDtoToEntity(smartPhone)));
+    public Phone updateSmartPhone(Phone smartPhone) {
+       // Long oldProdImageId = this.getSmartPhone(smartPhone.getId()).getImages().getIdImage();
+        //Long newProdImageId = smartPhone.getImages().getIdImage();
+        Phone updatedPhone = smartPhoneRepository.save(smartPhone);
+        
+        /*if (!oldProdImageId.equals(newProdImageId)) {
+            imageRepository.deleteById(oldProdImageId);
+        }*/
+        return updatedPhone;
     }
 
     @Override
@@ -50,19 +43,24 @@ public class PhoneServiceImpl implements PhoneService {
 
     @Override
     public void deleteSmartPhoneById(Long id) {
+        Phone phone = getSmartPhone(id);
+        
+        /*Delete the image before deleting the phone
+        if (phone.getImages() != null) {
+            imageRepository.deleteById(phone.getImages().getIdImage());
+        }*/
+        
         smartPhoneRepository.deleteById(id);
     }
 
     @Override
-    public PhoneDTO getSmartPhone(Long id) {
-        return convertEntityToDto(smartPhoneRepository.findById(id).orElse(null));
+    public Phone getSmartPhone(Long id) {
+        return smartPhoneRepository.findById(id).orElse(null);
     }
 
     @Override
-    public List<PhoneDTO> getAllSmartPhones() {
-        return smartPhoneRepository.findAll().stream()
-        		.map(this::convertEntityToDto)
-        		.collect(Collectors.toList());
+    public List<Phone> getAllSmartPhones() {
+        return smartPhoneRepository.findAll();
     }
 
     @Override
@@ -76,10 +74,10 @@ public class PhoneServiceImpl implements PhoneService {
     }
 
     @Override
-    public List<Phone> findByType(com.yassine.phones.entities.Type type) {
+    public List<Phone> findByType(Type type) {
         return smartPhoneRepository.findByType(type);
     }
- 
+
     @Override
     public List<Phone> findByTypeId(Long idt) {
         return smartPhoneRepository.findByType_IdType(idt);
@@ -99,15 +97,4 @@ public class PhoneServiceImpl implements PhoneService {
     public List<Phone> trierPhonesNomsPrix() {
         return smartPhoneRepository.trierPhonesNomsPrix();
     }
-    
-    @Override
-    public Phone convertDtoToEntity(PhoneDTO phoneDto) {
-    	Phone phone = new Phone();
-    	phone = modelMapper.map(phoneDto, Phone.class);
-     return phone;
-    }
-
-    
-  
-    
 }

@@ -1,11 +1,14 @@
 package com.yassine.phone.entities;
 
 import java.util.Date;
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Phone {
@@ -22,7 +25,12 @@ public class Phone {
     private int stockage;
     @ManyToOne
     private Type type;
-
+    /*@OneToOne
+    private Image image;*/
+    
+    @OneToMany (mappedBy = "phone")
+	private List<Image> images;
+	 
 
     // Constructeur par défaut
     public Phone() {
@@ -112,4 +120,14 @@ public class Phone {
                 ", dateCreation=" + dateCreation + ", prix=" + prix +
                 ", ram=" + ram + " Go, stockage=" + stockage + " Go]";
     }
+    public List<Image> getImages() {
+		return images;
+	}
+
+	public void setImages(List<Image> images) {
+		this.images = images;
+	}
+
+	
+
 }

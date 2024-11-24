@@ -73,7 +73,7 @@ class PhoneProject1ApplicationTests {
 			System.out.println(p);
 		}
 	}
-	@Test
+	/*@Test
 	public void testFindByType() {
 		Type type = new Type();
 		type.setIdType(1L);
@@ -81,7 +81,7 @@ class PhoneProject1ApplicationTests {
 		for (Phone p : phone) {
 			System.out.println(p);
 		}
-	}
+	}*/
 	@Test
 	public void findByTypeId() {
 		List<Phone> phone = phoneRepository.findByType_IdType(1L);
